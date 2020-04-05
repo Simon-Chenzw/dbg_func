@@ -1,0 +1,248 @@
+#pragma once
+
+#include <deque>
+#include <iostream>
+#include <queue>
+#include <stack>
+#include <string>
+#include <vector>
+
+#define open_dbg_func
+#define dbg(args...)                                                           \
+    dbg_namespace::dbg_class<decltype(0, args)>(__LINE__, std::string(#args))  \
+        .dbg_func(args)
+
+#ifdef __linux__
+#    define Color_name() std::cerr << "\033[36m"
+#    define Color_none() std::cerr << "\033[0m"
+#else
+#    define Color_name()
+#    define Color_none()
+#endif
+
+namespace dbg_namespace {
+
+    const int max_len = 20;
+
+    template <typename ReturnType>
+    class dbg_class {
+      public:
+        dbg_class(int _line, std::string str) {
+            line = _line;
+            first = true;
+            it = str.begin();
+        }
+
+        //最后一个变量 需返回值
+        template <typename T>    //单变量情况
+        ReturnType dbg_func(T&& a) {
+            varname_print();
+            std::cerr << " = ";
+            var_print(a);
+            std::cerr << '\n';
+            return a;
+        }
+
+        template <size_t N>    //字符数组常量
+        ReturnType dbg_func(const char (&str)[N]) {
+            varname_ignore();
+            for (int i = 0; i < N; i++) std::cerr << str[i];
+            std::cerr << '\n';
+            return str;
+        }
+
+        template <typename T, size_t N>    //数组
+        ReturnType dbg_func(T (&a)[N]) {
+            varname_print();
+            std::cerr << " = ";
+            var_print(a, a + N);
+            std::cerr << '\n';
+            return a;
+        }
+
+        template <typename T>    //两指针指向数组前后
+        ReturnType dbg_func(T*&& head, T*&& tail) {
+            std::cerr << '(';
+            varname_print(2);
+            std::cerr << ')' << " = " << '[';
+            var_print(head, tail);
+            std::cerr << ']' << '\n';
+            return tail;
+        }
+
+        //不是最后一个 递归
+        template <typename T, typename... Args>    //单变量情况
+        ReturnType dbg_func(T&& a, Args&&... args) {
+            varname_print();
+            std::cerr << " = ";
+            var_print(a);
+            std::cerr << "   ";
+            return dbg_func(args...);
+        }
+
+        template <size_t N, typename... Args>    //字符数组常量
+        ReturnType dbg_func(const char (&str)[N], Args&&... args) {
+            varname_ignore();
+            for (int i = 0; i < N; i++) std::cerr << str[i];
+            std::cerr << "   ";
+            return dbg_func(args...);
+        }
+
+        template <typename T, size_t N, typename... Args>    //数组
+        ReturnType dbg_func(T (&a)[N], Args&&... args) {
+            varname_print();
+            std::cerr << " = ";
+            var_print(a, a + N);
+            std::cerr << "   ";
+            return dbg_func(args...);
+        }
+
+        template <typename T, typename... Args>    //两指针指向数组前后
+        ReturnType dbg_func(T*&& head, T*&& tail, Args&&... args) {
+            std::cerr << '(';
+            varname_print(2);
+            std::cerr << ')' << " = " << '[';
+            var_print(head, tail);
+            std::cerr << ']' << "   ";
+            return dbg_func(args...);
+        }
+
+      private:
+        void print_line() {
+            std::cerr << '[' << line << ']' << "   ";
+            first = false;
+        }
+
+        void varname_print(int len = 1) {
+            if (first) print_line();
+            Color_name();
+            //下列计数是为了支持参数名混有逗号的情况
+            int Parentheses_cnt = 0;    //括号计数
+            int Double_quotes_cnt = 0;    //双引号计数，不支持嵌套双引号
+            while (*it != ',' && *it != '\0' || Parentheses_cnt
+                   || Double_quotes_cnt % 2) {
+                if (*it == '(') Parentheses_cnt++;
+                if (*it == ')') Parentheses_cnt--;
+                if (*it == '"') Double_quotes_cnt++;
+                if (*it != ' ') std::cerr << *it;
+                it++;
+            }
+            ++it;
+            if (len > 1) {
+                std::cerr << ',';
+                varname_print(len - 1);
+            }
+            Color_none();
+        }
+
+        void varname_ignore(int len = 1) {
+            if (first) print_line();
+            //下列计数是为了支持参数名混有逗号的情况
+            int Parentheses_cnt = 0;    //括号计数
+            int Double_quotes_cnt = 0;    //双引号计数，不支持嵌套双引号
+            while (*it != ',' && *it != '\0' || Parentheses_cnt
+                   || Double_quotes_cnt % 2) {
+                if (*it == '(') Parentheses_cnt++;
+                if (*it == ')') Parentheses_cnt--;
+                if (*it == '"') Double_quotes_cnt++;
+                it++;
+            }
+            ++it;
+            if (len > 1) varname_ignore(len - 1);
+        }
+
+        template <typename T>
+        void var_print(T a) {
+            std::cerr << a;
+        }
+
+        template <typename T1, typename T2>
+        void var_print(std::pair<T1, T2> a) {
+            std::cerr << '(';
+            var_print(a.first);
+            std::cerr << ',';
+            var_print(a.second);
+            std::cerr << ')';
+        }
+
+        template <typename iter>
+        void var_print(iter head, iter tail) {
+            int cnt = max_len;
+            for (iter it = head; it != tail; it++) {
+                if (it != head) std::cerr << ',';
+                if (cnt == 0) {
+                    std::cerr << "...";
+                    break;
+                }
+                var_print(*it);
+                cnt--;
+            }
+        }
+
+        template <typename T>
+        void var_print(std::vector<T> a) {
+            std::cerr << '{';
+            var_print(a.begin(), a.end());
+            std::cerr << '}';
+        }
+
+        template <typename T>
+        void var_print(std::deque<T> a) {
+            std::cerr << '{';
+            var_print(a.begin(), a.end());
+            std::cerr << '}';
+        }
+
+        template <typename T>
+        void var_print(std::stack<T> a) {
+            const int stack_max_len = max_len / 2;
+            std::cerr << '{';
+            if (a.size() > stack_max_len) std::cerr << "..." << ',';
+            std::deque<T> tmp;
+            for (int i = 0; i < stack_max_len && !a.empty(); i++) {
+                tmp.push_front(a.top());
+                a.pop();
+            }
+            var_print(tmp.begin(), tmp.end());
+            std::cerr << '}';
+        }
+
+        template <typename T>
+        void var_print(std::queue<T> a) {
+            const int queue_max_len = max_len / 3;
+            std::cerr << '{';
+            std::vector<T> tmp;
+            while (!a.empty()) {
+                tmp.push_back(a.front());
+                a.pop();
+            }
+            if (tmp.size() <= queue_max_len * 2 + 1)
+                var_print(tmp.begin(), tmp.end());
+            else {
+                var_print(tmp.begin(), tmp.begin() + queue_max_len);
+                std::cerr << ',' << "..." << ',';
+                var_print(tmp.end() - queue_max_len, tmp.end());
+            }
+            std::cerr << '}';
+        }
+
+        template <typename T, typename vec, typename func>
+        void var_print(std::priority_queue<T, vec, func> a) {
+            int pq_max_len = max_len / 2;
+            std::cerr << '{';
+            std::vector<T> tmp;
+            for (int i = 0; i < pq_max_len && !a.empty(); i++) {
+                tmp.push_back(a.top());
+                a.pop();
+            }
+            var_print(tmp.begin(), tmp.end());
+            if (!a.empty()) std::cerr << ',' << "...";
+            std::cerr << '}';
+        }
+
+        std::string::iterator it;
+        int line;
+        bool first;
+    };    // namespace dbg_namespace
+
+}    // namespace dbg_namespace
