@@ -33,7 +33,7 @@ a macro that can print values and their names
         #ifndef ONLINE_JUDGE
         #include<dbg_func>
         #else 
-        #define dbg(args...) args
+        #define dbg(args...) (args)
         #endif
         ```
         + `ONLINE_JUDGE`是一个在许多评测平台都有定义的宏 如`Codeforces`或`Luogu`
@@ -43,7 +43,7 @@ a macro that can print values and their names
         + 然后添加如下代码
             ```cpp
             #ifndef open_dbg_func
-            #define dbg(args...) args
+            #define dbg(args...) (args)
             #endif
             ```
         + `open_dbg_func` 是`dbg_func`中定义的宏 用来标记是否include了`dbg_func`
