@@ -1,44 +1,53 @@
 #include "dbg_func"
 using namespace std;
 
-int f(int n) {
+int func(int n) {
     if (n == 0)
         return 1;
     else
-        return dbg(n, n * f(n - 1));
-}
-
-vector<int>& test(vector<int>& a) {
-    a[0]++;
-    return dbg(a);
+        return dbg(n, n * func(n - 1));
 }
 
 int main() {
-    vector<int> a {1, 2, 3};
-    deque<int> b;
-    b.push_back(1);
-    b.push_back(2);
-    b.push_back(3);
-    stack<int> c;
-    c.push(1);
-    c.push(2);
-    c.push(3);
-    priority_queue<int> d;
-    d.push(1);
-    d.push(2);
-    d.push(3);
-    dbg(a, b, c, d);
+    dbg(dbg_namespace::max_len);
 
-    dbg(&a);
-    dbg(&test(a));
+    vector<int> vec;
+    for (int i = 0; i < 40; i++) vec.push_back(i);
+    dbg(vec);
 
-    string s = "test";
-    dbg("test");
-    dbg(s);
+    deque<int> deq;
+    for (int i = 0; i < 40; i++) deq.push_back(i);
+    dbg(deq);
 
-    cout << dbg(f(10));
+    stack<int> sta;
+    for (int i = 0; i < 40; i++) sta.push(i);
+    dbg(sta);
+
+    queue<int> que;
+    for (int i = 0; i < 40; i++) que.push(i);
+    dbg(que);
+
+    priority_queue<int> pq;
+    for (int i = 0; i < 40; i++) pq.push(i);
+    dbg(pq);
+
+    pair<int, bool> pr(123, 9.87);
+    dbg(pr);
+
+    string str = "this is a string";
+    char ch[] = "this is a char[]";
+    dbg("this is a const char[]");
+    dbg(ch);
+    dbg(str);
+
+    const char demo[] = "address of the return variable";
+    dbg(&demo, &dbg(demo));
 
     int arr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
-#line 123
     dbg(arr);
+
+    dbg(inter(arr + 3, arr + 7));
+
+    dbg("function:");
+    func(5);
 }
