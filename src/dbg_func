@@ -1,3 +1,14 @@
+/**
+ *
+ * @brief a macro that can print values and their names.(header-only)
+ * @file dbg_func
+ * @author Simon_Chen
+ * @copyright MIT License
+ * @example demo.cpp
+ * @remark github page:https://github.com/Simon-Chenzw/dbg_func
+ *
+ */
+
 #pragma once
 
 #include <deque>
@@ -11,7 +22,7 @@
 #define open_dbg_func
 #define dbg(...)                                                                                                       \
     dbg_namespace::dbg_class<decltype((__VA_ARGS__))>(__LINE__, std::string(#__VA_ARGS__)).dbg_func(__VA_ARGS__)
-#define inter(a, b) dbg_namespace::interval<decltype(a)>(a, b)
+#define dbg_inter(a, b) dbg_namespace::interval<decltype(a)>(a, b)
 
 namespace dbg_namespace {
 
@@ -33,7 +44,8 @@ namespace dbg_namespace {
         cyan = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
         white = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY,
         on_black = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED,
-        on_red = BACKGROUND_RED /*| BACKGROUND_INTENSITY*/,
+        on_red = BACKGROUND_RED /*| BACKGROUND_INTENSITY*/
+        ,
         on_green = BACKGROUND_GREEN | BACKGROUND_INTENSITY,
         on_yellow = BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY,
         on_blue = BACKGROUND_BLUE /*| BACKGROUND_INTENSITY*/,
@@ -120,6 +132,9 @@ namespace dbg_namespace {
         return ostream;
     }
 #endif
+
+    clr variable_name_color = clr::cyan;
+    clr constant_character_array = clr::green;
 
     template <typename T>
     class interval {
@@ -295,7 +310,7 @@ namespace dbg_namespace {
       private:
         //输出名字
         void varname_print() {
-            std::cerr << clr::cyan;
+            std::cerr << variable_name_color;
             // 下列计数是为了支持参数名混有逗号的情况
             int Parentheses_cnt = 0;    // 括号计数
             while (it != name.end() && !(*it == ',' && Parentheses_cnt == 0)) {
@@ -334,7 +349,7 @@ namespace dbg_namespace {
         void print_with_name(const char (&str)[N]) {
             std::cerr << "   ";
             varname_ignore();
-            std::cerr << clr::green;
+            std::cerr << constant_character_array;
             for (size_t i = 0; i < N; i++) std::cerr << str[i];
             std::cerr << clr::reset;
         }

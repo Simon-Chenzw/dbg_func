@@ -34,9 +34,10 @@ int main() {
     pair<int, bool> pr(123, 9.87);
     dbg(pr);
 
-    string str = "this is a string";
+    const char cch[] = "this is a const char[]";
     char ch[] = "this is a char[]";
-    dbg("this is a const char[]");
+    string str = "this is a string";
+    dbg(cch);
     dbg(ch);
     dbg(str);
 
@@ -46,10 +47,13 @@ int main() {
     int arr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
     dbg(arr);
 
-    dbg(inter(arr + 3, arr + 7));
+    dbg(dbg_inter(arr + 3, arr + 7));
 
-    dbg("function:");
+    dbg("Recursive function and its return val:");
     func(5);
 
-    dbg(string("test),"));
+    dbg("change variable_name_color to blue. change constant_character_array to magenta.");
+    dbg_namespace::variable_name_color = dbg_namespace::clr::blue;
+    dbg_namespace::constant_character_array = dbg_namespace::clr::magenta;
+    dbg(cch, ch);
 }

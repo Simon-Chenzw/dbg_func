@@ -1,7 +1,12 @@
 # dbg_func
 a macro that can print values and their names  
 提供一个简单的方法在输出调试法中输出数据  
+Tested on MSVC 14.26 + Windows 10 & GCC 7.5.0 + Ubuntu 18.04  
 **使用的时候请标明且附上github地址**
+
+## Demo
+* **[demo.cpp](src/demo.cpp):**
+    ![demo_pic](pic/demo_pic.jpg)
 
 ## 功能
 * 提供了一个宏`dbg(...)`来往标准错误流中输出数据  
@@ -21,9 +26,6 @@ a macro that can print values and their names
     + 若最后一个参数为左值返回左值引用，为右值则返回右值引用
     + 返回类型的判断代码为 `decltype((__VA_ARGS__))`
 
-## Demo
-* **src/demo.cpp:**
-    ![demo_pic](pic/demo_pic.jpg)
 
 ## 使用方法
 * 下载`src/dbg_func`
@@ -65,7 +67,7 @@ a macro that can print values and their names
 ## Tips
 * `dbg_namespace::max_len`指定了数组或STL容器的最大显示长度，默认为30
     + 在include本库前，添加 `#define DBG_LEN 50` 可以更改 `dbg_namespace::max_len` 为 50
-* ~~可自行更改`\033`代码 改变默认颜色~~ (颜色模块已重写，更改地方稍后添加)
+* 可自行改变默认颜色，详见demo
 * 若想支持自定义类，可直接重载输出运算符
 
 ## 已知 issue 及 TODO
