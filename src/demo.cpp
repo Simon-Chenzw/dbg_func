@@ -50,4 +50,6 @@ int main() {
 
     dbg("function:");
     func(5);
+
+    dbg(string("test),"));
 }
