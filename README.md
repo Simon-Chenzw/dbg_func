@@ -12,7 +12,7 @@ Tested on MSVC 14.26 + Windows 10 & GCC 7.5.0 + Ubuntu 18.04
 * 提供了一个宏`dbg(...)`来往标准错误流中输出数据  
 * 宏中可使用任意个数的参数，会打印在同一行中
 * 支持输出
-    + 通过`inter(l,r)`输出`[l,r]` l,r应为指针或迭代器
+    + 通过`dbg_inter(l,r)`输出`[l,r]` l,r应为指针或迭代器
     + 数组
     + pair 
     + vector
@@ -34,35 +34,23 @@ Tested on MSVC 14.26 + Windows 10 & GCC 7.5.0 + Ubuntu 18.04
 `dbg_func`中include了 `<iostream>` `<string>` `<vector>` `<deque>` `<stack>` `<queue>`  
 请确保在没有本库的情况下不会编译失败
 * 其他的使用方式 **(for OIer)**
-    1. 将`dbg_func`添加进`<bits/stdc++.h>`
-        + **only for linux**
-        + 添加如下代码, 以保证OJ编译时的正确运行
-            ```cpp
-            #ifndef open_dbg_func
-            #define dbg(args...) (args)
-            #endif
-            ```
-        + `open_dbg_func` 是`dbg_func`中定义的宏 用来标记是否include了`dbg_func`
-    2. 定义一个宏标记本机环境
-        + 添加如下代码
-            ```cpp
-            #ifdef IS_LOCAL_ENV
-            #include "dbg_func"
-            #else 
-            #define dbg(args...) (args)
-            #endif
-            ```
-    3. 采取标记OJ的方式
-        + `ONLINE_JUDGE`是一个在许多评测平台都有定义的宏 如`Codeforces`或`Luogu`
-        + 添加如下代码
-            ```cpp
+    1. 非OJ编译环境才使用`dbg_func`
+        + `ONLINE_JUDGE`是一个在许多评测平台都有定义的宏 如`Codeforces`和`Luogu`
+        + 使用前请确保**OJ有定义`ONLINE_JUDGE`**,或更换为OJ上定义的其他宏
+        +   ```cpp
             #ifndef ONLINE_JUDGE
             #include "dbg_func"
             #else 
-            #define dbg(args...) (args)
+            #define dbg(...) (__VA_ARGS__)
             #endif
             ```
-        + 使用前请确保**OJ有定义`ONLINE_JUDGE`**,或更换为OJ上定义的其他宏
+    2. 将`dbg_func`添加进`<bits/stdc++.h>` **only for linux**
+        + `open_dbg_func` 是`dbg_func`中定义的宏 用来标记是否include了`dbg_func`
+        +   ```cpp
+            #ifndef open_dbg_func
+            #define dbg(...) (__VA_ARGS__)
+            #endif
+            ```
 
 ## Tips
 * `dbg_namespace::max_len`指定了数组或STL容器的最大显示长度，默认为30
@@ -73,7 +61,7 @@ Tested on MSVC 14.26 + Windows 10 & GCC 7.5.0 + Ubuntu 18.04
 ## 已知 issue 及 TODO
 1. 若有参数没有输出运算符或者是不支持的类型,编译将无法通过
     - 添加识别是否有输出运算符的部分
-2. `inter(l,r)`作为最后一个参数,会返回内置的`interval`对象
+2. `dbg_inter(l,r)`作为最后一个参数,会返回内置的`interval`对象
     - 改为返回其中一个指针?
 3. `dbg`不能为空
     - 为空时只输出行号，或者输出一些更多的东西
