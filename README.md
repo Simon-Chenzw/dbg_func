@@ -20,6 +20,9 @@ Tested on MSVC 14.26 + Windows 10 & GCC 7.5.0 + Ubuntu 18.04
     + stack
     + queue
     + priority_queue
+    + set
+    + multiset
+    + map
 * 每行输出开头打印源代码所在行数
 * 彩色显示 
 * 会返回最后一个参数的引用

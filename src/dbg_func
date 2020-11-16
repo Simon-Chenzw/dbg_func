@@ -13,7 +13,9 @@
 
 #include <deque>
 #include <iostream>
+#include <map>
 #include <queue>
+#include <set>
 #include <stack>
 #include <string>
 #include <vector>
@@ -210,6 +212,27 @@ namespace dbg_namespace {
 
     template <typename T>    // deque
     void var_print(std::deque<T> a) {
+        std::cerr << '{';
+        print_inter(a.begin(), a.end());
+        std::cerr << '}';
+    }
+
+    template <typename T>    // set
+    void var_print(std::set<T> a) {
+        std::cerr << '{';
+        print_inter(a.begin(), a.end());
+        std::cerr << '}';
+    }
+
+    template <typename T>    // multiset
+    void var_print(std::multiset<T> a) {
+        std::cerr << '{';
+        print_inter(a.begin(), a.end());
+        std::cerr << '}';
+    }
+
+    template <typename T1, typename T2>    // map
+    void var_print(std::map<T1, T2> a) {
         std::cerr << '{';
         print_inter(a.begin(), a.end());
         std::cerr << '}';
