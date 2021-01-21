@@ -5,7 +5,7 @@ Tested on MSVC 14.26 + Windows 10 & GCC 7.5.0 + Ubuntu 18.04
 **使用的时候请标明且附上github地址**
 
 ## Demo
-* **[demo.cpp](demo.cpp):**
+* **[demo.cpp](demo.cpp):**  
     ![demo_pic](pic/demo_pic.jpg)
 
 ## 功能
