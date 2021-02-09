@@ -32,6 +32,17 @@
 // macro
 #define dbg(...) dbg_ns::pkg<decltype((__VA_ARGS__))>(__LINE__, #__VA_ARGS__).solve(__VA_ARGS__)
 #define dbgrange(l, r) dbg_ns::make_range(l, r)
+#define gen_dbg(cls, ...)                                                                                              \
+    ostream& dbg_print(ostream& os) const {                                                                            \
+        dbg_ns::namesplit names(#__VA_ARGS__);                                                                         \
+        os << '{';                                                                                                     \
+        dbg_ns::custom_unpkg(os, names, __VA_ARGS__);                                                                  \
+        os << '}';                                                                                                     \
+        return os;                                                                                                     \
+    }                                                                                                                  \
+    friend ostream& operator<<(ostream& os, const cls& rhs) {                                                          \
+        return rhs.dbg_print(os);                                                                                      \
+    }
 // TODO: when use dbg()
 
 #ifndef DBG_LEN
@@ -340,6 +351,20 @@ namespace dbg_ns {
             return os;
         }
     };
+
+    // custom class
+    std::ostream& custom_unpkg(std::ostream& os, dbg_ns::namesplit& names) {
+        return os;
+    }
+
+    template <typename T, typename... Args>
+    std::ostream& custom_unpkg(std::ostream& os, dbg_ns::namesplit& names, const T& a, const Args&... args) {
+        std::stringstream ss;
+        ss << std::boolalpha << a;
+        os << clr::magenta << '<' << names.get() << '>' << clr::reset << ss.str();
+        if (sizeof...(args)) os << ' ';
+        return custom_unpkg(os, names, args...);
+    }
 
     class console {
       public:

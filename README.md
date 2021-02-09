@@ -53,6 +53,8 @@ Tested on MSVC 14.26 + Windows 10 & GCC 7.5.0 + Ubuntu 18.04
     + 在include本库前，添加宏可以更改
     + 例如 `#define DBG_LEN 50` 可以更改为 50
 * 若想支持自定义类，可直接重载输出运算符
+    + 实验功能 通过宏自动生成运算符`gen_dbg(cls,args...)`
+      + 输出样式`foo = {<a>1 <b>false <d>3.14 <s>str}`
 
 ## 已知 issue 及 TODO
 1. 若有参数没有输出运算符或者是不支持的类型,编译将无法通过
