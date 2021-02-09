@@ -14,7 +14,7 @@ Tested on MSVC 14.26 + Windows 10 & GCC 7.5.0 + Ubuntu 18.04
 * 支持输出
     + 通过宏`dbgrange(l,r)`输出`[l,r)` l,r应为指针或迭代器
     + 数组
-    + pair 
+    + pair/tuple
     + STL 容器
 * 每行输出开头打印源代码所在行数
 * 彩色显示 
