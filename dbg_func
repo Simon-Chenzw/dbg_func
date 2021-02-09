@@ -334,9 +334,9 @@ namespace dbg_ns {
 
         friend std::ostream& operator<<(std::ostream& os, const valpr& pr) {
             if (!pr.name.empty())
-                os << "   " << clr::cyan << pr.name << clr::reset << " = " << pr.value;
+                os << clr::cyan << pr.name << clr::reset << " = " << pr.value;
             else
-                os << "   " << clr::green << pr.value << clr::reset;
+                os << clr::green << pr.value << clr::reset;
             return os;
         }
     };
@@ -385,7 +385,7 @@ namespace dbg_ns {
         friend std::ostream& operator<<(std::ostream& os, const console& con) {
             // TODO 自动匹配行宽 自动换行format
             os << "[" << std::setw(2) << std::setfill('0') << con.line << ']';
-            for (const valpr& val : con.vals) os << val;
+            for (const valpr& val : con.vals) os << "   " << val;
             os << std::endl;
             return os;
         }
