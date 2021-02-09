@@ -21,6 +21,7 @@
 #include <sstream>
 #include <stack>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 #include <forward_list>
@@ -93,14 +94,14 @@ namespace dbg_ns {
         range(const _pointer& _l, const _pointer& _r): l(_l), r(_r) {}
 
         friend std::ostream& operator<<(std::ostream& os, const range& rg) {
-            if (bracket) os << '{';    // if constexpr (c++17)
+            if (bracket) os << '{';    // TODO: if constexpr (c++17)
             if (rg.l != rg.r) {
                 os << *rg.l;
                 _pointer it = std::next(rg.l);
                 for (int cnt = 2; it != rg.r && cnt <= DBG_LEN; std::advance(it, 1), ++cnt) os << ',' << ' ' << *it;
                 if (it != rg.r) os << ',' << ' ' << "...";
             }
-            if (bracket) os << '}';    // if constexpr (c++17)
+            if (bracket) os << '}';    // TODO: if constexpr (c++17)
             return os;
         }
     };
@@ -123,7 +124,23 @@ namespace dbg_ns {
     };
 
     // tuple
-    // TODO
+    template <size_t index = 0, typename... Args>
+    typename std::enable_if<(index >= sizeof...(Args)), std::ostream&>::type operator<<(std::ostream& os,
+                                                                                        const std::tuple<Args...>& t) {
+        if (sizeof...(Args))    // TODO: if constexpr (c++17)
+            return os << '}';
+        else
+            return os << '{' << '}';
+    }
+
+    template <size_t index = 0, typename... Args>
+    typename std::enable_if<(index < sizeof...(Args)), std::ostream&>::type operator<<(std::ostream& os,
+                                                                                       const std::tuple<Args...>& t) {
+        if (index == 0) os << '{';    // TODO: if constexpr (c++17)
+        os << std::get<index>(t);
+        if (index + 1 != sizeof...(Args)) os << ',' << ' ';    // TODO: if constexpr (c++17)
+        return operator<<<index + 1, Args...>(os, t);
+    }
 
     // generate range
     template <typename T>
