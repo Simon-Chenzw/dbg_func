@@ -276,8 +276,8 @@ namespace dbg_ns {
     };
 
     // priority_queue
-    template <typename T>
-    std::ostream& operator<<(std::ostream& os, const std::priority_queue<T>& container) {
+    template <typename T, typename Seq, typename Com>
+    std::ostream& operator<<(std::ostream& os, const std::priority_queue<T, Seq, Com>& container) {
         // TODO: Low performance
         typename std::decay<decltype(container)>::type pq_copy(container);
         os << '{';

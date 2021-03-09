@@ -27,7 +27,7 @@ int main() {
     for (int i = 0; i < 40; i++) que.push(i);
     dbg(que);
 
-    priority_queue<int> pq;
+    priority_queue<int, vector<int>, greater<int>> pq;
     for (int i = 0; i < 40; i++) pq.push(i);
     dbg(pq);
 
